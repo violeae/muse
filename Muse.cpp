@@ -98,8 +98,8 @@ ifstream fin;
 ofstream fout;
 
 map<string,int> nums={
-    {"octave", 4}, {"transpose", 0}, {"bpm", 140},
-    {"note", 4}
+    {"O", 4}, {"T", 0}, {"B", 140},
+    {"N", 4}
 };
 
 
@@ -117,9 +117,9 @@ map<string,string> var_mapping;
 // Helpers
 // ---------------------------------------------
 void ofreq(const char &m){
-    double note_value = 60000.0 / nums["bpm"] * 4.0 / nums["note"];
-    double freq = oct4[m] * pow(2, nums["octave"] - 4) * pow(2, nums["transpose"] / 12.0);
-    //cout << "Playing " << m << nums["octave"] << " (" << freq << " Hz)\n";
+    double note_value = 60000.0 / nums["B"] * 4.0 / nums["N"];
+    double freq = oct4[m] * pow(2, nums["O"] - 4) * pow(2, nums["T"] / 12.0);
+    //cout << "Playing " << m << nums["O"] << " (" << freq << " Hz)\n";
     playTone(freq, note_value);
 }
 
@@ -167,39 +167,35 @@ void process_line(const string &line) {
             }
         }
 
+        
+        else if (opr == ">") nums["O"]++;
+        else if (opr == "<") nums["O"]--;
+
+
         // Setting nums
-        else if (opr == ">") nums["octave"]++;
-        else if (opr == "<") nums["octave"]--;
-        else if (opr == "T") {
-            string trans_temp;
-            if (!(iss >> trans_temp)) {
-                cerr << "Error: transpose value missing\n";
+        else if (nums.find(opr)!=nums.end()){
+            string num_temp;
+            if(!(iss>>num_temp)){
+                cerr<<"Error: "<<opr<<" value missing\n";
                 continue;
             }
 
-            if (trans_temp == "++") {
-                nums["transpose"]++;
-            } else if (trans_temp == "--") {
-                nums["transpose"]--;
+            if(num_temp== "++"){
+                nums[opr]++;
+            } else if (num_temp == "--"){
+                nums[opr]--;
             } else {
                 try {
-                    nums["transpose"] = stoi(trans_temp);
-                } catch (...) {
-                    cerr << "Invalid transpose value: " << trans_temp << endl;
-                    // keep previous transpose
+                    nums[opr] = stoi(num_temp);
+                } catch(...) {
+                    cerr << "Invalid "<<opr<<" value: "<<num_temp<<endl;
                 }
+            }
+            cout<<"Num "<<opr<<" set to "<<nums[opr]<<endl;
         }
 
-        cout << "Transpose set to " << nums["transpose"] << endl;
-    }
-        else if (opr == "N") iss >> nums["note"];
-        else if (opr == "O") {
-            char c; iss >> c;
-            if (isdigit(c)) nums["octave"] = c - '0';
-        }
-        else if (opr=="B"){
-            iss>>nums["bpm"];
-        }
+
+
         else if (opr=="if"){
             string if_cond; //a num
             string if_sentence;
@@ -222,8 +218,8 @@ void process_line(const string &line) {
         }
         // Printing and functions
         else if (opr == "info"){
-            cout<<"Current Settings: "<<"BPM: "<<nums["bpm"]<<" Octave: "<<nums["octave"]<<endl
-                <<"Note Value: "<<nums["note"]<<" Transpose: "<<nums["transpose"]<<endl;
+            cout<<"Current Settings: "<<"BPM: "<<nums["B"]<<" Octave: "<<nums["O"]<<endl
+                <<"Note Value: "<<nums["N"]<<" Transpose: "<<nums["T"]<<endl;
             for(auto vm_pair: var_mapping){
                 cout<<"VAR "<<vm_pair.first<<" = "<<vm_pair.second<<endl;
             }
