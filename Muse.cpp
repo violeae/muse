@@ -143,9 +143,14 @@ void process_line(const string &line) {
             iss >> var_name;
             char c;
             iss >> c; // skip '('
-            while (iss >> noskipws >> c && c != ')') {
+            int brc=1;
+            while (iss >> noskipws >> c) {
+                if(c=='('){brc++;}
+                else if(c==')'){brc--;}
+                if(brc==0){break;}
                 var_content += c;
             }
+            iss >> std::skipws;
             var_mapping[var_name] = var_content;
             cout << "Defined VAR " << var_name << " = " << var_content << endl;
         }
@@ -182,9 +187,17 @@ void process_line(const string &line) {
 
             if(num_temp== "++"){
                 nums[opr]++;
-            } else if (num_temp == "--"){
+            }
+            else if (num_temp == "--"){
                 nums[opr]--;
-            } else {
+            }
+            else if (num_temp == ">>"){
+                nums[opr]/=2;
+            }
+            else if (num_temp == "<<"){
+                nums[opr]*=2;
+            }
+            else {
                 try {
                     nums[opr] = stoi(num_temp);
                 } catch(...) {
@@ -202,9 +215,14 @@ void process_line(const string &line) {
             iss>>if_cond; //true if nums[if_cond]!=0
             char c;
             iss>>c; //skip '('
-            while (iss>>noskipws>>c&&c!=')'){
+            int brc=1;
+            while (iss>>noskipws>>c){
+                if(c=='('){brc++;}
+                else if(c==')'){brc--;}
+                if(brc==0){break;}
                 if_sentence+=c;
             }
+            iss >> std::skipws;
             //Checking if conditions
             auto it = nums.find(if_cond);
             if(it == nums.end()){
