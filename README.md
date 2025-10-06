@@ -17,6 +17,8 @@
 
 **++** and **--**: To add 1 or subtract 1 from a NUM (O, T, N, etc.) E.g. **T ++** for a transposition to be higher by 1 semitone.
 
+**>>** and **<<**: To divide by 2 (result floored) or to multiply by 2. E.g. **N 4 N <<** to make a quarter note into an eighth note.
+
 **if**: For setting a condition for a sentence to be executed. E.g. **if A (/tune)** only executes **/tune** when **A != 0**.
 
 **quit**: Quiting the program.
