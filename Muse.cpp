@@ -1,4 +1,4 @@
-/* COMPILE BY DOING THIS IF USING G++:
+/* COMPILE BY DOING THIS:
    g++ Muse.cpp -ldsound -ldxguid -lwinmm -lole32 -luuid -static -o playtone.exe
 */
 #include <bits/stdc++.h>
@@ -97,10 +97,12 @@ void playTone(double frequency, double durationMs) {
 ifstream fin;
 ofstream fout;
 
-int octave = 4;
-int transpose = 0;
-int bpm = 100;
-int note = 4;
+map<string,int> nums={
+    {"octave", 4}, {"transpose", 0}, {"bpm", 140},
+    {"note", 4}
+};
+
+
 
 set<char> keys = {'c','d','e','f','g','a','b'};
 
@@ -115,9 +117,9 @@ map<string,string> var_mapping;
 // Helpers
 // ---------------------------------------------
 void ofreq(const char &m){
-    double note_value = 60000.0 / bpm * 4.0 / note;
-    double freq = oct4[m] * pow(2, octave - 4) * pow(2, transpose / 12.0);
-    //cout << "Playing " << m << octave << " (" << freq << " Hz)\n";
+    double note_value = 60000.0 / nums["bpm"] * 4.0 / nums["note"];
+    double freq = oct4[m] * pow(2, nums["octave"] - 4) * pow(2, nums["transpose"] / 12.0);
+    //cout << "Playing " << m << nums["octave"] << " (" << freq << " Hz)\n";
     playTone(freq, note_value);
 }
 
@@ -129,9 +131,12 @@ void process_line(const string &line) {
     string opr;
 
     while (iss >> opr) {
+        // Keys
         if (keys.count(opr[0])) {
             ofreq(opr[0]);
         }
+
+        // Declaration
         else if (opr == "VAR") {
             string var_name;
             string var_content;
@@ -144,6 +149,13 @@ void process_line(const string &line) {
             var_mapping[var_name] = var_content;
             cout << "Defined VAR " << var_name << " = " << var_content << endl;
         }
+        else if (opr == "NUM"){
+            string num_name;
+            int num_content;
+            iss>>num_name>>num_content;
+            nums[num_name]=num_content;
+            cout<< "Define NUM "<<num_name<<" = "<< num_content<<endl;
+        }
         else if (opr[0] == '/') {
             string var_to_exec = opr.substr(1); // fixed: take name after '/'
             auto it = var_mapping.find(var_to_exec);
@@ -154,9 +166,11 @@ void process_line(const string &line) {
                 process_line(it->second);
             }
         }
-        else if (opr[0] == '>') octave++;
-        else if (opr[0] == '<') octave--;
-        else if (opr[0] == 'T') {
+
+        // Setting nums
+        else if (opr == ">") nums["octave"]++;
+        else if (opr == "<") nums["octave"]--;
+        else if (opr == "T") {
             string trans_temp;
             if (!(iss >> trans_temp)) {
                 cerr << "Error: transpose value missing\n";
@@ -164,24 +178,55 @@ void process_line(const string &line) {
             }
 
             if (trans_temp == "++") {
-                transpose++;
+                nums["transpose"]++;
             } else if (trans_temp == "--") {
-                transpose--;
+                nums["transpose"]--;
             } else {
                 try {
-                    transpose = stoi(trans_temp);
+                    nums["transpose"] = stoi(trans_temp);
                 } catch (...) {
                     cerr << "Invalid transpose value: " << trans_temp << endl;
                     // keep previous transpose
                 }
         }
 
-        cout << "Transpose set to " << transpose << endl;
+        cout << "Transpose set to " << nums["transpose"] << endl;
     }
-        else if (opr[0] == 'N') iss >> note;
-        else if (opr[0] == 'O') {
+        else if (opr == "N") iss >> nums["note"];
+        else if (opr == "O") {
             char c; iss >> c;
-            if (isdigit(c)) octave = c - '0';
+            if (isdigit(c)) nums["octave"] = c - '0';
+        }
+        else if (opr=="B"){
+            iss>>nums["bpm"];
+        }
+        else if (opr=="if"){
+            string if_cond; //a num
+            string if_sentence;
+            iss>>if_cond; //true if nums[if_cond]!=0
+            char c;
+            iss>>c; //skip '('
+            while (iss>>noskipws>>c&&c!=')'){
+                if_sentence+=c;
+            }
+            //Checking if conditions
+            auto it = nums.find(if_cond);
+            if(it == nums.end()){
+                cerr<<"Num "<<if_cond<<" not found.\n";
+            }
+            else{
+                if(nums[if_cond]!=0){
+                    process_line(if_sentence);
+                }
+            }
+        }
+        // Printing and functions
+        else if (opr == "info"){
+            cout<<"Current Settings: "<<"BPM: "<<nums["bpm"]<<" Octave: "<<nums["octave"]<<endl
+                <<"Note Value: "<<nums["note"]<<" Transpose: "<<nums["transpose"]<<endl;
+            for(auto vm_pair: var_mapping){
+                cout<<"VAR "<<vm_pair.first<<" = "<<vm_pair.second<<endl;
+            }
         }
         else if (opr == "quit") {
             cout << "Exiting program..." << endl;
@@ -215,11 +260,11 @@ void file_watcher() {
 // ---------------------------------------------
 void interactive_input() {
     cout << "Interactive mode: type commands or notes.\n"
-         << "Examples:\n"
+        /* << "Examples:\n"
          << "   c d e f g\n"
          << "   VAR tune (c d e)\n"
          << "   /tune\n"
-         << "   quit\n"
+         << "   quit\n" */
          << "-------------------------------------------\n";
 
     string line;
