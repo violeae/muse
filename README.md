@@ -3,6 +3,8 @@
 ### Syntax
 **a b c d e f g**: Playing notes separated by a space.
 
+**r**(soon): a rest (with the same note value as a regular note).
+
 **O**: Setting Octave by adding the octave number after a space. E.g. **O 5** to set to the fifth octave.
 
 **T**: Setting Transpose. E.g. **T 1** for a transposition by 1 semitone.
@@ -14,6 +16,8 @@
 **NUM**: Creating a NUM to hold a number. E.g. **VAR A 5**.
 
 **/**: Playing a VAR. E.g. **/tune** to play **a b c** as defined above.
+
+**>** and **<**: To increase or decrease octave by 1.
 
 **++** and **--**: To add 1 or subtract 1 from a NUM (O, T, N, etc.) E.g. **T ++** for a transposition to be higher by 1 semitone.
 
