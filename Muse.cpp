@@ -2,6 +2,7 @@
    g++ Muse.cpp -ldsound -ldxguid -lwinmm -lole32 -luuid -static -o playtone.exe
 */
 #include <bits/stdc++.h>
+#include <chrono>
 #include <Windows.h>
 #include <dsound.h>
 #include <thread>
@@ -108,7 +109,7 @@ set<char> keys = {'c','d','e','f','g','a','b'};
 
 map<char,double> oct4 = {
     {'c',261.63}, {'d',293.66}, {'e',329.63},
-    {'f',349.23}, {'g',392.00}, {'a',440.00}, {'b',493.88}
+    {'f',349.23}, {'g',392.00}, {'a',440.00}, {'b',493.88},
 };
 
 map<string,string> var_mapping;
@@ -135,7 +136,9 @@ void process_line(const string &line) {
         if (keys.count(opr[0])) {
             ofreq(opr[0]);
         }
-
+        else if (opr == "r"){
+            Sleep(static_cast<DWORD>(60000.0 / nums["B"] * 4.0 / nums["N"]));
+        }
         // Declaration
         else if (opr == "VAR") {
             string var_name;
