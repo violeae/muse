@@ -1,9 +1,10 @@
-# Muse - A Beeping Music Generator in C++
+# Muse - Compose Music in Notes
+### A Music Generator written completely in C++, with FluidSynth libraries.
 
 ### Syntax
 **a b c d e f g**: Playing notes separated by a space.
 
-**r**(soon): a rest (with the same note value as a regular note).
+**r**: a rest (with the same note value as a regular note).
 
 **O**: Setting Octave by adding the octave number after a space. E.g. **O 5** to set to the fifth octave.
 
