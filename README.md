@@ -13,7 +13,7 @@
 
 **VAR**: Creating a VAR for a series of notes (and operations). E.g. **VAR tune (a b c)**.
 
-**NUM**: Creating a NUM to hold a number. E.g. **VAR A 5**.
+**NUM**: Creating a NUM to hold a number. E.g. **NUM A 5**.
 
 **/**: Playing a VAR. E.g. **/tune** to play **a b c** as defined above.
 
