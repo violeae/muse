@@ -1,96 +1,61 @@
-/* COMPILE BY DOING THIS:
-   g++ Muse.cpp -ldsound -ldxguid -lwinmm -lole32 -luuid -static -o playtone.exe
-*/
+#include <fluidsynth.h>
 #include <bits/stdc++.h>
 #include <chrono>
 #include <Windows.h>
-#include <dsound.h>
 #include <thread>
 using namespace std;
 
+
+// --- Definition of constants
 #ifndef M_PI
 #define M_PI 3.14159265358979323846
 #endif
 
-#pragma comment(lib, "dsound.lib")
-#pragma comment(lib, "dxguid.lib")
-#pragma comment(lib, "winmm.lib")
 
-// ---------------------------------------------
-// DirectSound tone generator
-// ---------------------------------------------
-void playTone(double frequency, double durationMs) {
-    double durationSeconds = durationMs / 1000.0;
 
-    LPDIRECTSOUND8 directSound;
-    if (FAILED(DirectSoundCreate8(NULL, &directSound, NULL))) return;
-    directSound->SetCooperativeLevel(GetDesktopWindow(), DSSCL_PRIORITY);
+// --- Initialize FluidSynth globally (once)
+fluid_settings_t* g_settings = nullptr;
+fluid_synth_t* g_synth = nullptr;
 
-    DSBUFFERDESC primaryDesc = {};
-    primaryDesc.dwSize = sizeof(DSBUFFERDESC);
-    primaryDesc.dwFlags = DSBCAPS_PRIMARYBUFFER;
-
-    LPDIRECTSOUNDBUFFER primaryBuffer;
-    if (FAILED(directSound->CreateSoundBuffer(&primaryDesc, &primaryBuffer, NULL))) {
-        directSound->Release();
-        return;
+// Call this once when program starts
+void initFluidSynth(const char* soundfontPath) {
+    g_settings = new_fluid_settings();
+    g_synth = new_fluid_synth(g_settings);
+    fluid_settings_setstr(g_settings, "audio.driver", "dsound");
+    new_fluid_audio_driver(g_settings, g_synth);
+    int id = fluid_synth_sfload(g_synth, soundfontPath, 1);
+    if (id == FLUID_FAILED) {
+        printf("Failed to load SoundFont: %s\n", soundfontPath);
     }
-
-    WAVEFORMATEX waveFormat = {};
-    waveFormat.wFormatTag = WAVE_FORMAT_PCM;
-    waveFormat.nChannels = 1;
-    waveFormat.nSamplesPerSec = 44100;
-    waveFormat.wBitsPerSample = 16;
-    waveFormat.nBlockAlign = waveFormat.nChannels * waveFormat.wBitsPerSample / 8;
-    waveFormat.nAvgBytesPerSec = waveFormat.nSamplesPerSec * waveFormat.nBlockAlign;
-    primaryBuffer->SetFormat(&waveFormat);
-
-    int sampleRate = waveFormat.nSamplesPerSec;
-    int numSamples = static_cast<int>(sampleRate * durationSeconds);
-    int bufferSize = numSamples * waveFormat.nBlockAlign;
-
-    DSBUFFERDESC secondaryDesc = {};
-    secondaryDesc.dwSize = sizeof(DSBUFFERDESC);
-    secondaryDesc.dwFlags = DSBCAPS_GLOBALFOCUS;
-    secondaryDesc.dwBufferBytes = bufferSize;
-    secondaryDesc.lpwfxFormat = &waveFormat;
-
-    LPDIRECTSOUNDBUFFER secondaryBuffer;
-    if (FAILED(directSound->CreateSoundBuffer(&secondaryDesc, &secondaryBuffer, NULL))) {
-        primaryBuffer->Release();
-        directSound->Release();
-        return;
-    }
-
-    vector<short> samples(numSamples);
-    const double amplitude = 30000.0;
-    int fadeSamples = sampleRate * 0.01;
-
-    for (int i = 0; i < numSamples; ++i) {
-        double t = (double)i / sampleRate;
-        double value = sin(2.0 * M_PI * frequency * t);
-        double gain = 1.0;
-        if (i < fadeSamples) gain = (double)i / fadeSamples;
-        else if (i > numSamples - fadeSamples) gain = (double)(numSamples - i) / fadeSamples;
-        samples[i] = (short)(value * amplitude * gain);
-    }
-
-    void* ptr1; DWORD bytes1; void* ptr2; DWORD bytes2;
-    if (SUCCEEDED(secondaryBuffer->Lock(0, bufferSize, &ptr1, &bytes1, &ptr2, &bytes2, 0))) {
-        memcpy(ptr1, samples.data(), bytes1);
-        if (ptr2 && bytes2 > 0)
-            memcpy(ptr2, (char*)samples.data() + bytes1, bytes2);
-        secondaryBuffer->Unlock(ptr1, bytes1, ptr2, bytes2);
-    }
-
-    secondaryBuffer->SetCurrentPosition(0);
-    secondaryBuffer->Play(0, 0, 0);
-    Sleep((DWORD)(durationSeconds * 1000));
-
-    secondaryBuffer->Release();
-    primaryBuffer->Release();
-    directSound->Release();
 }
+
+// --- Convert frequency (Hz) to nearest MIDI note (to be compatible with the original beeping)
+int freqToMidi(double freq) {
+    return static_cast<int>(std::round(69 + 12 * log2(freq / 440.0)));
+}
+
+// --- Play a note by frequency (ms) with instrument timbre
+void playTone(double freq, int durationMs, int velocity = 100) {
+    if (!g_synth) return;
+
+    int midiNote = freqToMidi(freq);
+
+    // Start note
+    fluid_synth_noteon(g_synth, 0, midiNote, velocity);
+
+    // Wait for specified duration
+    Sleep(durationMs);
+
+    // Stop note
+    fluid_synth_noteoff(g_synth, 0, midiNote);
+}
+
+// --- Cleanup FluidSynth
+void cleanupFluidSynth() {
+    if (g_synth) delete_fluid_synth(g_synth);
+    if (g_settings) delete_fluid_settings(g_settings);
+}
+
 
 // ---------------------------------------------
 // Global state
@@ -102,8 +67,6 @@ map<string,int> nums={
     {"O", 4}, {"T", 0}, {"B", 140},
     {"N", 4}
 };
-
-
 
 set<char> keys = {'c','d','e','f','g','a','b'};
 
@@ -296,6 +259,8 @@ void interactive_input() {
 // Main
 // ---------------------------------------------
 int main() {
+    initFluidSynth("FluidR3_GM.sf2");
+    fluid_synth_program_change(g_synth, 0, 40);
     fin.open("data.txt");
     fout.open("data.txt", ios::app);
     if (!fin.is_open() || !fout.is_open()) {
