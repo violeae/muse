@@ -45,8 +45,6 @@ NUMs, VARs declared in a pair of braces are only effective in its own scope. The
 where any reference will be looked up from the current node to the root (global settings) where channels are assigned only on initialisation.
 However channel 9 (0-index) will produce drums/percussions so it is skipped. So if more than 15 nodes are playing at the same time, there may be some distortions.
 
-Note this is not completely supported yet, as operations after braces may be skipped, and I am working on it.
-
 **quit**: Quiting the program.
 
 ## Usage
