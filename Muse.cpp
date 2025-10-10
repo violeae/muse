@@ -224,7 +224,8 @@ void process_line(const string &line, ScopeNode* scope) {
                 hasNum(scope,opr)
             )
         ){
-            getNum(scope,opr);
+            int val = getNum(scope, opr);
+            scope->numVars[opr] = val;
             string num_temp;
             if(!(iss>>num_temp)){
                 cerr<<"Error: "<<opr<<" value missing\n";
@@ -328,7 +329,7 @@ void process_line(const string &line, ScopeNode* scope) {
             }
             if(!content.empty()){thread_contents.push_back(content);}
 
-
+            
             // Launch subscopes
             vector<thread> ths;
             for(const auto& component: thread_contents){
@@ -341,6 +342,11 @@ void process_line(const string &line, ScopeNode* scope) {
                 });
             }
             for (auto& th : ths) th.join();  // wait for all to finish
+            string rest;
+            getline(iss,rest);
+            if(!rest.empty()){
+                process_line(rest, scope);
+            }
         }
 
 
