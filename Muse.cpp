@@ -151,6 +151,18 @@ void ofreq(const char &m, ScopeNode* scope){
     playTone(freq, note_value, scope);
 }
 
+bool isComplete(const string& s){
+    int braces = 0;
+    int parens =0;
+    for (char c : s){
+        if(c=='{') braces++;
+        else if (c=='}') braces --;
+        else if (c=='(') parens++;
+        else if (c==')') parens--;
+    }
+    return parens==0 && braces == 0;
+}
+
 // ---------------------------------------------
 // Process a command line
 // ---------------------------------------------
@@ -333,11 +345,15 @@ void process_line(const string &line, ScopeNode* scope) {
             // Launch subscopes
             vector<thread> ths;
             for(const auto& component: thread_contents){
-                ths.emplace_back([component,scope](){
+                mutex mtx;
+                ths.emplace_back([component,scope, &mtx](){
                     ScopeNode* node =new ScopeNode();
                     node->parent = scope;
                     node->channel = getThreadChannel();
-                    scope->children.push_back(node);
+                    {
+                        lock_guard<mutex> lock(mtx);
+                        scope->children.push_back(node);
+                    }
                     process_line(component,node);
                 });
             }
@@ -404,11 +420,25 @@ void interactive_input() {
          << "   quit\n" */
          << "-------------------------------------------\n";
 
-    string line;
+    string line,buffer;
+    cout << "> ";
     while (true) {
-        cout << "> ";
         if (!getline(cin, line)) break;
-        if (!line.empty()) process_line(line,root);
+        auto trim = [](string s){
+            s.erase(0, s.find_first_not_of(" \t\r\n"));
+            s.erase(s.find_last_not_of(" \t\r\n") +1);
+            return s;
+        };
+        string t = trim(line);
+        buffer += line +"\n";
+        if (isComplete(buffer)){
+            process_line(buffer,root);
+            buffer.clear();
+            cout<<">";
+        }
+        else{
+            cout<<"...";
+        }
     }
 }
 
