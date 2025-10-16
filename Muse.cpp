@@ -33,11 +33,23 @@ struct ScopeNode{
 
 
 
-set<char> keys = {'c','d','e','f','g','a','b'};
+set<string> keys = {
+    "c","d","e","f","g","a","b",
+    "c#","db",
+    "d#","eb",
+    "f#","gb",
+    "g#","ab",
+    "a#","bb",
+};
 
-map<char,double> oct4 = {
-    {'c',261.63}, {'d',293.66}, {'e',329.63},
-    {'f',349.23}, {'g',392.00}, {'a',440.00}, {'b',493.88},
+map<string,double> oct4 = {
+    {"c",261.63}, {"d",293.66}, {"e",329.63},
+    {"f",349.23}, {"g",392.00}, {"a",440.00},
+    {"b",493.88},
+    {"c#",277.18},{"db",277.18},
+    {"d#", 311.13},{"eb", 311.13},
+    {"f#",369.99},{"gb",369.99},
+    {"a#", 466.16},{"bb",466.16}
 };
 
 
@@ -82,7 +94,9 @@ bool hasVar(ScopeNode* scope, const std::string& name) {
     return false;
 }
 
-
+// ---------------------------------------
+// FluidSynth Initialization and Settings
+// ---------------------------------------
 
 // --- Initialize FluidSynth globally (once)
 fluid_settings_t* g_settings = nullptr;
@@ -144,7 +158,7 @@ ScopeNode* root = new ScopeNode();
 // ---------------------------------------------
 // Helpers
 // ---------------------------------------------
-void ofreq(const char &m, ScopeNode* scope){
+void ofreq(const string &m, ScopeNode* scope){
     double note_value = 60000.0 / getNum(scope,"B") * 4.0 / (getNum(scope,"N"));
     double freq = oct4[m] * pow(2, getNum(scope,"O") - 4) * pow(2, getNum(scope,"T") / 12.0);
     //cout << "Playing " << m << nums["O"] << " (" << freq << " Hz)\n";
@@ -167,13 +181,27 @@ bool isComplete(const string& s){
 // Process a command line
 // ---------------------------------------------
 void process_line(const string &line, ScopeNode* scope) {
-    istringstream iss(line);
+    string code = line;
+    // Processing Comments:
+    // 1. Ignore full-line comments starting with "#"
+    string trimmed = code;
+    trimmed.erase(0,trimmed.find_first_not_of(" \t\r\n"));
+    if(!trimmed.empty()&&trimmed[0]=='#'){
+        return;
+    }
+
+
+    // 2. Remove comments starting with " #"
+    size_t pos = code.find(" #");
+    code = (pos!=string::npos)?code.substr(0,pos):code;
+
+    istringstream iss(code);
     string opr;
 
     while (iss >> opr) {
         // Keys
-        if (keys.count(opr[0])) {
-            ofreq(opr[0], scope);
+        if (keys.count(opr)) {
+            ofreq(opr, scope);
         }
         else if (opr == "r"){
             Sleep(static_cast<DWORD>(60000.0 / (getNum(scope,"B")) * 4.0 / (getNum(scope,"N")) ));
@@ -369,9 +397,9 @@ void process_line(const string &line, ScopeNode* scope) {
 
         // Printing and functions
         else if (opr == "info"){
-            cout<<"Current Settings: "<<"BPM: "<<getNum(scope,"B")<<" Octave: "<<getNum(scope,"O")<<endl
+            cout<<"Current Settings: \n"<<"BPM: "<<getNum(scope,"B")<<" Octave: "<<getNum(scope,"O")<<endl
                 <<"Note Value: "<<getNum(scope,"N")<<" Transpose: "<<getNum(scope,"T")<<endl
-                <<"Instrument: "<<getNum(scope, "I")<<"Volume: "<<getNum(scope,"V")<<endl;
+                <<"Instrument: "<<getNum(scope, "I")<<" Volume: "<<getNum(scope,"V")<<endl;
             //Print All VARs
             auto cur = scope;
             while(cur!=nullptr){
@@ -384,6 +412,9 @@ void process_line(const string &line, ScopeNode* scope) {
         else if (opr == "quit") {
             cout << "Exiting program..." << endl;
             exit(0);
+        }
+        else if (opr == "clear"){
+            cout << "\033[2J\033[1;1H";
         }
     }
 }
@@ -434,7 +465,7 @@ void interactive_input() {
         if (isComplete(buffer)){
             process_line(buffer,root);
             buffer.clear();
-            cout<<">";
+            cout<<"> ";
         }
         else{
             cout<<"...";
