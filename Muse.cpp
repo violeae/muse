@@ -234,8 +234,8 @@ void process_line(const string &line, ScopeNode* scope) {
         else if (opr[0] == '/') {
             string var_to_exec = opr.substr(1); // fixed: take name after '/'
             
-            if (hasVar==0) {
-                cerr << "VAR" << var_to_exec << " not found.\n";
+            if (hasVar(scope, var_to_exec)==0) {
+                cerr << "VAR " << var_to_exec << " not found.\n";
             } else {
                 auto it = getVar(scope,var_to_exec);
                 // recursively execute the content
@@ -418,6 +418,36 @@ void process_line(const string &line, ScopeNode* scope) {
         }
     }
 }
+// --------------------------------------------
+// Preload Session (preload.txt)
+// --------------------------------------------
+void preload_session(const string& preloadFile) {
+    ifstream prefile(preloadFile);
+    if (!prefile.is_open()) return; // if no preload.txt, skip
+
+    // Redirect output temporarily to NUL
+    streambuf* cout_buf = cout.rdbuf();
+    streambuf* cerr_buf = cerr.rdbuf();
+#ifdef _WIN32
+    ofstream devnull("NUL");
+#else
+    ofstream devnull("/dev/null");
+#endif
+    cout.rdbuf(devnull.rdbuf());
+    cerr.rdbuf(devnull.rdbuf());
+
+    string line;
+    while (getline(prefile, line)) {
+        if (!line.empty())
+            process_line(line, root);
+    }
+
+    // Restore output for next two threads
+    cout.rdbuf(cout_buf);
+    cerr.rdbuf(cerr_buf);
+
+    cout << "Preload complete.\n";
+}
 
 // ---------------------------------------------
 // Thread 1: watch data.txt
@@ -490,6 +520,9 @@ int main() {
 
     initFluidSynth("FluidR3_GM.sf2");
     fluid_synth_program_change(g_synth, 0,25);
+
+    preload_session("preload.muse");
+
     fin.open("data.txt");
     fout.open("data.txt", ios::app);
     if (!fin.is_open() || !fout.is_open()) {
