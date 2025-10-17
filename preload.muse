@@ -1,0 +1,222 @@
+# ===================================================
+# SAMPLE: COMPLETE PIANO CHORD LIBRARY FOR MUSE
+# These chords are for simultaneous playback only
+# Covers all 12 keys and common chord types
+# ===================================================
+
+# ===================================================
+# 1. MAJOR CHORDS
+# ===================================================
+VAR Cmaj   ({ c e g })
+VAR C#maj  ({ c# f g# })
+VAR Dmaj   ({ d f# a })
+VAR D#maj  ({ d# g a# })
+VAR Emaj   ({ e g# b })
+VAR Fmaj   ({ f a c })
+VAR F#maj  ({ f# a# c# })
+VAR Gmaj   ({ g b d })
+VAR G#maj  ({ g# c d# })
+VAR Amaj   ({ a c# e })
+VAR A#maj  ({ a# d f })
+VAR Bmaj   ({ b d# f# })
+
+# ===================================================
+# 2. MINOR CHORDS
+# ===================================================
+VAR Cmin   ({ c eb g })
+VAR C#min  ({ c# e g# })
+VAR Dmin   ({ d f a })
+VAR D#min  ({ d# f# a# })
+VAR Emin   ({ e g b })
+VAR Fmin   ({ f ab c })
+VAR F#min  ({ f# a c# })
+VAR Gmin   ({ g bb d })
+VAR G#min  ({ g# b d# })
+VAR Amin   ({ a c e })
+VAR A#min  ({ a# c# f })
+VAR Bmin   ({ b d f# })
+
+# ===================================================
+# 3. DIMINISHED CHORDS
+# ===================================================
+VAR Cdim   ({ c eb gb })
+VAR C#dim  ({ c# e g })
+VAR Ddim   ({ d f ab })
+VAR D#dim  ({ d# f# a })
+VAR Edim   ({ e g bb })
+VAR Fdim   ({ f ab cb })
+VAR F#dim  ({ f# a c })
+VAR Gdim   ({ g bb db })
+VAR G#dim  ({ g# b d })
+VAR Adim   ({ a c eb })
+VAR A#dim  ({ a# c# e })
+VAR Bdim   ({ b d f })
+
+# ===================================================
+# 4. AUGMENTED CHORDS
+# ===================================================
+VAR Caug   ({ c e g# })
+VAR C#aug  ({ c# f a })
+VAR Daug   ({ d f# a# })
+VAR D#aug  ({ d# g b })
+VAR Eaug   ({ e g# b# })
+VAR Faug   ({ f a c# })
+VAR F#aug  ({ f# a# d })
+VAR Gaug   ({ g b d# })
+VAR G#aug  ({ g# c e })
+VAR Aaug   ({ a c# f })
+VAR A#aug  ({ a# d g })
+VAR Baug   ({ b d# fx })
+
+# ===================================================
+# 5. MAJOR 7TH CHORDS
+# ===================================================
+VAR Cmaj7   ({ c e g b })
+VAR C#maj7  ({ c# f g c })
+VAR Dmaj7   ({ d f# a c# })
+VAR D#maj7  ({ d# g a d })
+VAR Emaj7   ({ e g# b d# })
+VAR Fmaj7   ({ f a c e })
+VAR F#maj7  ({ f# a# c# f })
+VAR Gmaj7   ({ g b d f# })
+VAR G#maj7  ({ g# c d g })
+VAR Amaj7   ({ a c# e g# })
+VAR A#maj7  ({ a# d f a })
+VAR Bmaj7   ({ b d# f# a# })
+
+# ===================================================
+# 6. MINOR 7TH CHORDS
+# ===================================================
+VAR Cmin7   ({ c eb g bb })
+VAR C#min7  ({ c# e g b })
+VAR Dmin7   ({ d f a c })
+VAR D#min7  ({ d# f# a c# })
+VAR Emin7   ({ e g b d })
+VAR Fmin7   ({ f ab c eb })
+VAR F#min7  ({ f# a c# e })
+VAR Gmin7   ({ g bb d f })
+VAR G#min7  ({ g# b d# f# })
+VAR Amin7   ({ a c e g })
+VAR A#min7  ({ a# c# f g# })
+VAR Bmin7   ({ b d f# a })
+
+# ===================================================
+# 7. DOMINANT 7TH CHORDS
+# ===================================================
+VAR C7   ({ c e g bb })
+VAR C#7  ({ c# f g b })
+VAR D7   ({ d f# a c })
+VAR D#7  ({ d# g a c# })
+VAR E7   ({ e g# b d })
+VAR F7   ({ f a c eb })
+VAR F#7  ({ f# a# c# e })
+VAR G7   ({ g b d f })
+VAR G#7  ({ g# c d f# })
+VAR A7   ({ a c# e g })
+VAR A#7  ({ a# d f g# })
+VAR B7   ({ b d# f# a })
+
+# ===================================================
+# 8. HALF-DIMINISHED (MIN7b5) CHORDS
+# ===================================================
+VAR Cm7b5   ({ c eb gb bb })
+VAR C#m7b5  ({ c# e g b })
+VAR Dm7b5   ({ d f ab c })
+VAR D#m7b5  ({ d# f# a c# })
+VAR Em7b5   ({ e g bb d })
+VAR Fm7b5   ({ f ab cb eb })
+VAR F#m7b5  ({ f# a c e })
+VAR Gm7b5   ({ g bb db f })
+VAR G#m7b5  ({ g# b d f# })
+VAR Am7b5   ({ a c eb g })
+VAR A#m7b5  ({ a# c# e g# })
+VAR Bm7b5   ({ b d f a })
+
+# ===================================================
+# 9. SUSPENDED CHORDS
+# ===================================================
+VAR Csus2   ({ c d g })
+VAR Csus4   ({ c f g })
+VAR C#sus2  ({ c# d# g# })
+VAR C#sus4  ({ c# f# g# })
+VAR Dsus2   ({ d e a })
+VAR Dsus4   ({ d g a })
+VAR D#sus2  ({ d# f a# })
+VAR D#sus4  ({ d# g# a# })
+VAR Esus2   ({ e f# b })
+VAR Esus4   ({ e a b })
+VAR Fsus2   ({ f g c })
+VAR Fsus4   ({ f bb c })
+VAR F#sus2  ({ f# g# c# })
+VAR F#sus4  ({ f# b c# })
+VAR Gsus2   ({ g a d })
+VAR Gsus4   ({ g c d })
+VAR G#sus2  ({ g# a# d# })
+VAR G#sus4  ({ g# c# d# })
+VAR Asus2   ({ a b e })
+VAR Asus4   ({ a d e })
+VAR A#sus2  ({ a# c f })
+VAR A#sus4  ({ a# d# f })
+VAR Bsus2   ({ b c# f# })
+VAR Bsus4   ({ b e f# })
+
+# ===================================================
+# 10. 9TH CHORDS
+# ===================================================
+VAR Cmaj9   ({ c e g b d })
+VAR Cmin9   ({ c eb g bb d })
+VAR C9      ({ c e g bb d })
+VAR Dmaj9   ({ d f# a c# e })
+VAR Dmin9   ({ d f a c e })
+VAR D9      ({ d f# a c e })
+VAR Emaj9   ({ e g# b d# f# })
+VAR Emin9   ({ e g b d f# })
+VAR E9      ({ e g# b d f# })
+VAR Fmaj9   ({ f a c e g })
+VAR Fmin9   ({ f ab c eb g })
+VAR F9      ({ f a c eb g })
+VAR Gmaj9   ({ g b d f# a })
+VAR Gmin9   ({ g bb d f a })
+VAR G9      ({ g b d f a })
+VAR Amaj9   ({ a c# e g# b })
+VAR Amin9   ({ a c e g b })
+VAR A9      ({ a c# e g b })
+VAR Bmaj9   ({ b d# f# a# c# })
+VAR Bmin9   ({ b d f# a c# })
+VAR B9      ({ b d# f# a c# })
+
+# ===================================================
+# 11. 11TH CHORDS
+# ===================================================
+VAR Cmaj11   ({ c e g b d f })
+VAR Cmin11   ({ c eb g bb d f })
+VAR Dmaj11   ({ d f# a c# e g })
+VAR Dmin11   ({ d f a c e g })
+VAR Emaj11   ({ e g# b d# f# a })
+VAR Emin11   ({ e g b d f# a })
+VAR Fmaj11   ({ f a c e g bb })
+VAR Fmin11   ({ f ab c eb g bb })
+VAR Gmaj11   ({ g b d f# a c })
+VAR Gmin11   ({ g bb d f a c })
+VAR Amaj11   ({ a c# e g# b d })
+VAR Amin11   ({ a c e g b d })
+VAR Bmaj11   ({ b d# f# a# c# e })
+VAR Bmin11   ({ b d f# a c# e })
+
+# ===================================================
+# 12. 13TH CHORDS
+# ===================================================
+VAR Cmaj13   ({ c e g b d f a })
+VAR Cmin13   ({ c eb g bb d f a })
+VAR Dmaj13   ({ d f# a c# e g b })
+VAR Dmin13   ({ d f a c e g b })
+VAR Emaj13   ({ e g# b d# f# a c# })
+VAR Emin13   ({ e g b d f# a c# })
+VAR Fmaj13   ({ f a c e g bb d })
+VAR Fmin13   ({ f ab c eb g bb d })
+VAR Gmaj13   ({ g b d f# a c e })
+VAR Gmin13   ({ g bb d f a c e })
+VAR Amaj13   ({ a c# e g# b d f# })
+VAR Amin13   ({ a c e g b d f# })
+VAR Bmaj13   ({ b d# f# a# c# e g# })
+VAR Bmin13   ({ b d f# a c# e g# })
