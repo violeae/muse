@@ -47,6 +47,9 @@ However channel 9 (0-index) will produce drums/percussions so it is skipped. So 
 
 **quit**: Quiting the program.
 
+### Comments
+**#**: At the end of a line, use **#** after a space to start a comment. Or insert a line of comment starting with **#** directly. They have to be outside braces and parentheses for now.
+
 ## Usage
 
 In the interactive mode, type notes and operations to play. Or in the data.txt, write melodies and run the program directly to hear them.
