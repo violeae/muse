@@ -1,0 +1,37 @@
+T -6
+
+VAR EA ( a { > e a <  } )
+VAR EF ( f { > c f <  } )
+VAR EG ( g { > d g <  } )
+VAR EX ( T -- a T ++ { b > e <  } )
+VAR EGG ( {  ( g ) ( > g )  } )
+VAR EGA ( T ++ /EGG T -- )
+
+B 72
+N 16
+VAR PB1 ( { 
+(a b > c d e r a g N 8 e N 16 < a r > e d c < b a b > c d e r d c < b a b > c < b a T -- a T ++ b)
+(N 16 O 3   /EA   /EA /EA /EA     /EA      /EA   /EA  /EA  /EF   /EF  /EF /EF  /EG  /EG     /EG   /EX )
+ } )
+
+VAR PB2 ( { 
+(a b > c d e r a g N 8 e N 16 < a r > e d c < b a b > c d e r d c N 8 < b > c   d e )
+(N 16 O 3   /EA   /EA /EA /EA     /EA      /EA   /EA  /EA  /EF   /EF /EF /EF        /EG   /EG /EGA /EGA /EGA /EGA ) 
+} )
+
+VAR PB3 ( { 
+( g a e d e r d e g a e d e r d e d c < b g a r g a b > c d e < a r )
+( < /EF /EF /EF /EF /EG /EG /EG /EG /EA   /EA /EA /EA  /EA  /EA   /EA )
+} ) 
+
+
+VAR PB4 ( {
+(   g a e d e r d e g a e d e r a b > c < b a g e r d e d c < b g a r )
+( < /EF /EF /EF /EF /EG /EG /EG /EG   /EA   /EA /EA /EA /EA   /EA  /EA )
+} )
+
+
+(
+O 4 /PB1 O 4 /PB2 O 4 /PB1 O 4 /PB2
+O 5 /PB3 ( d e ) /PB3  ( e g ) /PB3 ( e g ) /PB4
+)
