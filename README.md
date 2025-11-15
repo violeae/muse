@@ -56,4 +56,6 @@ In the interactive mode, type notes and operations to play. Or in the data.txt, 
 
 Actually, by setting a NUM and --, you can achieve a loop for a definite amount of times. Also, by placing **/B** inside B, you can also create an infinite loop.
 
+If you'd like some examples, please feel free to refer to some works in /examples in the repository, and even better, to try compose one yourself and submit a pull request!
+
 Have Fun!
