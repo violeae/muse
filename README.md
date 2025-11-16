@@ -59,3 +59,13 @@ Actually, by setting a NUM and --, you can achieve a loop for a definite amount 
 If you'd like some examples, please feel free to refer to some works in /examples in the repository, and even better, to try compose one yourself and submit a pull request!
 
 Have Fun!
+
+## Future Plan:
+- Correction mechanisms to detect errors in syntax
+- Save as midi using the midifile library (and use absolute timing) (I'm working on it)
+- Save as other file types
+- Add new syntaxes like for loops and many other
+- A chord parser for easier usage
+- Use instrument name directly when switching to other instruments.
+- Improve efficiency
+- ... (feel free to propose in the issues)
