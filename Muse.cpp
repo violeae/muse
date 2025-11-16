@@ -3,7 +3,7 @@
 #include <chrono>
 #include <Windows.h>
 #include <thread>
-#include<atomic>
+#include <atomic>
 using namespace std;
 
 #ifndef M_PI
@@ -419,7 +419,7 @@ void process_line(const string &line, ScopeNode* scope) {
     }
 }
 // --------------------------------------------
-// Preload Session (preload.txt)
+// Preload Session (preload.muse)
 // --------------------------------------------
 void preload_session(const string& preloadFile) {
     ifstream prefile(preloadFile);
@@ -539,3 +539,4 @@ int main() {
     t2.join();
     return 0;
 }
+
