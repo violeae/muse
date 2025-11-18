@@ -9,7 +9,7 @@
 
 **r**: a rest (with the same note value as a regular note).
 
-### NUMs
+### (Pre-defined) NUMs
 
 **NUM**: Creating a NUM to hold a number. E.g. **NUM A 5**.
 
@@ -22,6 +22,8 @@
 **I**: Setting Instrument. Note the index on midi instrument list should be subtracted by 1 since it starts from 0 in the program. So piano is 0 instead of 1.
 
 **V**: Setting Velocity. You can think of it as volume.
+
+**B**: Setting bpm.
 
 ### VARs
 
@@ -45,7 +47,9 @@ NUMs, VARs declared in a pair of braces are only effective in its own scope. The
 where any reference will be looked up from the current node to the root (global settings) where channels are assigned only on initialisation.
 However channel 9 (0-index) will produce drums/percussions so it is skipped. So if more than 15 nodes are playing at the same time, there may be some distortions.
 
-**quit**: Quiting the program.
+**info**: Getting information on all of the VARs in the current scope and pre-defined NUMs.
+
+**quit**: Quitting the program.
 
 ### Comments
 **#**: At the end of a line, use **#** after a space to start a comment. Or insert a line of comment starting with **#** directly. They have to be outside braces and parentheses for now.
