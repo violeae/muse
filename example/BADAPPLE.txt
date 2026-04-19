@@ -1,3 +1,5 @@
+BADAPPLE
+
 T -6
 
 VAR EA ( a { > e a <  } )
@@ -24,14 +26,24 @@ VAR PB3 ( {
 ( < /EF /EF /EF /EF /EG /EG /EG /EG /EA   /EA /EA /EA  /EA  /EA   /EA )
 } ) 
 
+VAR PB3x ( { 
+( g a e d e r d e g a e d e r d e d c < b g a r g a b > c d e < a r )
+( #NOTCOMPLETE )
+} ) 
 
 VAR PB4 ( {
 (   g a e d e r d e g a e d e r a b > c < b a g e r d e d c < b g a r )
 ( < /EF /EF /EF /EF /EG /EG /EG /EG   /EA   /EA /EA /EA /EA   /EA  /EA )
 } )
 
+VAR PB4x ( {
+(   g a e d e r d e g a e d e r a b > c < b a g e r d e d c < b g a r )
+( #NOTCOMPLETE )
+} )
 
 (
 O 4 /PB1 O 4 /PB2 O 4 /PB1 O 4 /PB2
 O 5 /PB3 ( d e ) /PB3  ( e g ) /PB3 ( e g ) /PB4
+O 5 ( d e ) /PB3x ( d e ) /PB3x ( d e ) /PB3x ( d e ) /PB4x
 )
+

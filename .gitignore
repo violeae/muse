@@ -1,0 +1,9 @@
+bin/
+build/
+*.o
+*.obj
+*.d
+*.exe
+*.out
+outputMidi.midi
+

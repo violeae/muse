@@ -1,6 +1,6 @@
 # ===================================================
-# SAMPLE: COMPLETE PIANO CHORD LIBRARY FOR MUSE
-# These chords are for simultaneous playback only
+# COMPLETE PIANO CHORD LIBRARY FOR MUSE
+# Notes inside braces {} are played simultaneously
 # Covers all 12 keys and common chord types
 # ===================================================
 
@@ -220,3 +220,19 @@ VAR Amaj13   ({ a c# e g# b d f# })
 VAR Amin13   ({ a c e g b d f# })
 VAR Bmaj13   ({ b d# f# a# c# e g# })
 VAR Bmin13   ({ b d f# a c# e g# })
+
+# ===================================================
+# Example Usage
+# ===================================================
+# Play C major chord
+# /Cmaj
+
+# Play multiple chords simultaneously
+# { /Cmaj /Gmaj /Amin }
+
+# Play a chord sequence
+# /Cmaj
+# /Fmaj
+# /Gmaj
+
+

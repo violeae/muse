@@ -1,75 +1,71 @@
-# Muse - Compose Music in Notes
-### A Music Generator written completely in C++, with FluidSynth libraries.
+# Muse
 
-## Syntax
+Muse is a command-line melody player that reads a text-based command sheet and plays notes through a SoundFont via FluidSynth. It can also export played notes into a MIDI file.
 
-### Play Notes
+## Project Layout
 
-**a b c d e f g**: Playing notes separated by a space.
+- `src/` - application sources
+- `include/` - application headers
+- `midifile/` - vendored [midifile](https://github.com/craigsapp/midifile) library source
+- `example/` - sample melody command sheets
+- `Makefile` - standard build entry point
 
-**r**: a rest (with the same note value as a regular note).
+## Build
 
-### (Pre-defined) NUMs
+Requirements:
 
-**NUM**: Creating a NUM to hold a number. E.g. **NUM A 5**.
+- C++17 compiler (`g++` or `clang++`)
+- GNU `make`
+- FluidSynth development package (headers + library)
 
-**O**: Setting Octave by adding the octave number after a space. E.g. **O 5** to set to the fifth octave.
+Build:
 
-**T**: Setting Transpose. E.g. **T 1** for a transposition by 1 semitone.
+```bash
+make
+```
 
-**N**: Setting Note Value. E.g. **N 16** for a 16th note.
+Binary output:
 
-**I**: Setting Instrument. Note the index on midi instrument list should be subtracted by 1 since it starts from 0 in the program. So piano is 0 instead of 1.
+```text
+bin/muse
+```
 
-**V**: Setting Velocity. You can think of it as volume.
+## Run
 
-**B**: Setting bpm.
+```bash
+./bin/muse --soundfont FluidR3_GM.sf2 --data data.txt --preload preload.muse --midi outputMidi.midi
+```
 
-### VARs
+Streaming mode (route events to MIDI out / loopMIDI):
 
-**VAR**: Creating a VAR for a series of notes (and operations). E.g. **VAR tune (a b c)**.
+```bash
+./bin/muse --stream --stream-port 0 --data data.txt --preload preload.muse
+```
 
-### Operations and Built-in Functions
+Options:
 
-**/**: Playing a VAR. E.g. **/tune** to play **a b c** as defined above.
+- `--soundfont <path>`: SoundFont file (`.sf2`)
+- `--data <path>`: watched command file
+- `--preload <path>`: preload script run at startup
+- `--midi <path>`: output MIDI path used by the `save` command
+- `--stream`: send note events to MIDI out port instead of direct FluidSynth audio
+- `--stream-port <n>`: MIDI out port index used in streaming mode
+- `--help`: show help
 
-**>** and **<**: To increase or decrease octave by 1.
+## Command Language (Current)
 
-**++** and **--**: To add 1 or subtract 1 from a NUM (O, T, N, etc.) E.g. **T ++** for a transposition to be higher by 1 semitone.
-
-**>>** and **<<**: To divide by 2 (result floored) or to multiply by 2. E.g. **N 4 N <<** to make a quarter note into an eighth note.
-
-**if**: For setting a condition for a sentence to be executed. E.g. **if A (/tune)** only executes **/tune** when **A != 0**.
-
-**{ () }**: For simultaneous playback. E.g. **{ c e g ( > c e g ) }** will play c/e/g/(>c) together first and then play e then g.
-
-NUMs, VARs declared in a pair of braces are only effective in its own scope. The parsing is organised through a tree of nodes (ScopeNodes) 
-where any reference will be looked up from the current node to the root (global settings) where channels are assigned only on initialisation.
-However channel 9 (0-index) will produce drums/percussions so it is skipped. So if more than 15 nodes are playing at the same time, there may be some distortions.
-
-**info**: Getting information on all of the VARs in the current scope and pre-defined NUMs.
-
-**quit**: Quitting the program.
-
-### Comments
-**#**: At the end of a line, use **#** after a space to start a comment. Or insert a line of comment starting with **#** directly. They have to be outside braces and parentheses for now.
-
-## Usage
-
-In the interactive mode, type notes and operations to play. Or in the data.txt, write melodies and run the program directly to hear them.
-
-Actually, by setting a NUM and --, you can achieve a loop for a definite amount of times. Also, by placing **/B** inside B, you can also create an infinite loop.
-
-If you'd like some examples, please feel free to refer to some works in /examples in the repository, and even better, to try compose one yourself and submit a pull request!
-
-Have Fun!
-
-## Future Plan:
-- Correction mechanisms to detect errors in syntax
-- Save as midi using the midifile library (and use absolute timing) (I'm working on it)
-- Save as other file types
-- Add new syntaxes like for loops and many other
-- A chord parser for easier usage
-- Use instrument name directly when switching to other instruments.
-- Improve efficiency
-- ... (feel free to propose in the issues)
+- Notes: `c d e f g a b` with sharps/flats (`c#`, `db`, ...)
+- Rest: `r`
+- Scope variables:
+  - `NUM <name> <value>`
+  - `VAR <name> (<commands>)`
+  - `/name` to execute a `VAR`
+- Controls:
+  - `>` / `<` octave shift
+  - `if <numVar> (<commands>)`
+  - `{ ... }` parallel components
+- Utility:
+  - `info` print settings
+  - `save` write MIDI
+  - `clear` clear terminal
+  - `quit` exit
